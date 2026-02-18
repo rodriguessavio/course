@@ -1,4 +1,6 @@
 HELP.md
+docker-compose.yml
+pom.xml
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -92,3 +94,5 @@ Thumbs.db
 # JVM crash logs
 hs_err_pid*
 replay_pid*
+
+src/main/resources/application.properties
