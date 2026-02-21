@@ -1,5 +1,6 @@
 package br.com.saviorodrigues.main.modules.course.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +14,10 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 public class UpdateCourseDTO {
     @Length(min=10, max=60, message = "O campo [nome] deve possuir entre 10 e 30 caracteres")
+    @Schema(example = "Desenvolvimento Web")
     private String name;
 
     @Length(min=5, max=10, message = "O campo [categoria] deve possuir entre 5 e 10 caracteres")
+    @Schema(example = "Tecnologia")
     private String category;
 }

@@ -6,6 +6,13 @@ import br.com.saviorodrigues.main.modules.course.dto.UpdateCourseDTO;
 import br.com.saviorodrigues.main.modules.course.entities.CourseEntity;
 import br.com.saviorodrigues.main.modules.course.repositories.CourseRepository;
 import br.com.saviorodrigues.main.modules.course.useCases.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +25,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/course")
+@Tag(name = "Curso", description = "Informações do curso")
 public class CourseController {
     @Autowired
     private CreateCourseUseCase createCourseUseCase;
@@ -34,6 +42,16 @@ public class CourseController {
     @Autowired
     private ToggleActiveCourseUseCase toggleActiveCourseUseCase;
 
+    @Operation(summary = "Criação de um Curso", description = "Essa função é responsável pela criação do curso")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(
+                            schema = @Schema(implementation = CourseEntity.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "400", description = "Curso já existe para essa categoria")
+
+    })
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CreateCourseDTO createCourseDTO) {
         try{
@@ -51,6 +69,16 @@ public class CourseController {
 
     }
 
+    @Operation(summary = "Listar todos os cursos", description = "Essa função é responsável por listar todos os cursos")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(
+                            array = @ArraySchema(schema = @Schema(implementation = CourseEntity.class))
+                    )
+            }),
+            @ApiResponse(responseCode = "400", description = "Curso já existe para essa categoria")
+
+    })
     @GetMapping("/")
     public ResponseEntity<Object> findAll(@RequestParam(required = false) String name, @RequestParam(required = false) String category){
 
@@ -59,6 +87,16 @@ public class CourseController {
         return ResponseEntity.ok(result);
     }
 
+    @Operation(summary = "Atualização de um Curso", description = "Essa função é responsável por atualizar os dados de um curso")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(
+                            schema = @Schema(implementation = CourseEntity.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "400", description = "Curso não encontrado")
+
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable UUID id, @Valid @RequestBody UpdateCourseDTO updateCourseDTO) {
         try{
@@ -70,6 +108,12 @@ public class CourseController {
 
     }
 
+    @Operation(summary = "Exclusão de um Curso", description = "Essa função é responsável por excluir um curso existente")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Curso excluído com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Curso não encontrado")
+
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         try{
@@ -81,6 +125,17 @@ public class CourseController {
 
     }
 
+
+    @Operation(summary = "Atualizar status", description = "Essa função é responsável atualizar o status do curso")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(
+                            schema = @Schema(implementation = CourseEntity.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "400", description = "Curso não encontrado")
+
+    })
     @PatchMapping("/{id}")
     public ResponseEntity<Object> patch(@PathVariable UUID id, @Valid @RequestBody ToggleActiveCourseDTO toggleActiveCourseDTO) {
         try{
